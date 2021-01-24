@@ -21,8 +21,8 @@ TaskHandle_t task1;
 TaskHandle_t task2;
 
 // Task handlers
-void Task1code( void * pvParameters);
-void Task2code( void * pvParameters);
+void debugTask( void * pvParameters);
+void measureTask( void * pvParameters);
 
 void setup() {
 
@@ -31,8 +31,8 @@ void setup() {
   
   // task configuration
   xTaskCreate(
-    Task1code,   /* Task function. */
-    "Task1",     /* name of task. */
+    debugTask,   /* Task function. */
+    "Debug Task",     /* name of task. */
     10000,       /* Stack size of task */
     NULL,        /* parameter of the task */
     1,           /* priority of the task */
@@ -40,8 +40,8 @@ void setup() {
 
   // second task configuration
   xTaskCreate(
-    Task2code,   /* Task function. */
-    "Task2",     /* name of task. */
+    measureTask,   /* Task function. */
+    "Measure Task",     /* name of task. */
     10000,       /* Stack size of task */
     NULL,        /* parameter of the task */
     1,           /* priority of the task */
@@ -55,7 +55,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 }
 
-void Task1code( void * pvParameters ){
+void debugTask( void * pvParameters ){
   const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
 
   for(;;){
@@ -64,7 +64,7 @@ void Task1code( void * pvParameters ){
   } 
 }
 
-void Task2code( void * pvParameters){
+void measureTask( void * pvParameters){
   const TickType_t xDelay = 25 / portTICK_PERIOD_MS;
   const uint32_t longDelay = 40 * xDelay;
   for(;;){
