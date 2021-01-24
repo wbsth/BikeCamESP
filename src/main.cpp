@@ -15,6 +15,7 @@ BluetoothSerial BTSerial;
 /* Initialize SR04 */
 NewPing sonar(TRIG, ECHO, MAX_DISTANCE);
 uint8_t distance;
+uint8_t message[] = {48, 10};
 
 TaskHandle_t task1;
 TaskHandle_t task2;
@@ -64,11 +65,13 @@ void Task1code( void * pvParameters ){
 }
 
 void Task2code( void * pvParameters){
-  const TickType_t xDelay = 50 / portTICK_PERIOD_MS;
+  const TickType_t xDelay = 25 / portTICK_PERIOD_MS;
+  const uint32_t longDelay = 40 * xDelay;
   for(;;){
     distance = sonar.ping_cm();
     if (distance < SAFE_DISTANCE && distance != 0){
-      BTSerial.write(&distance, 1);
+      BTSerial.write(message, 2);
+      vTaskDelay( longDelay );
     }
     vTaskDelay( xDelay );
   }
